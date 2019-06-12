@@ -98,7 +98,6 @@ class OperationEvaluatorTest {
 
     }
 
-
     @Test
     fun `can subtract quantities`() {
         val inputTree = Operation(
@@ -127,5 +126,25 @@ class OperationEvaluatorTest {
                 .onSuccess { fail("Expected exception to be thrown") }
                 .onFailure { assertThat(it, IsInstanceOf(UnconvertibleException::class.java)) }
 
+    }
+
+    @Test
+    fun `can evaluate operation tree`() {
+        // 1 m - 4 m + 7 m  =  (1 m - 4 m) + 7 m = 4 m
+        val inputTree =
+                Operation(
+                        value = "+",
+                        left = Operation(
+                                value = "-",
+                                left = QuantityElement(value = "1", unit = "m"),
+                                right = QuantityElement(value = "4", unit = "m")
+                        ),
+                        right = QuantityElement(value = "7", unit = "m")
+                )
+
+        val expectedResult = q(4, Units.METRE)
+
+        val result = OperationEvaluator().evaluate(inputTree)
+        assertThat(result, `is`(expectedResult as Quantity<*>))
     }
 }
