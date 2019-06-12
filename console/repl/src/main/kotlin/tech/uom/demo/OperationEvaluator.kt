@@ -1,7 +1,5 @@
 package tech.uom.demo
 
-import tech.units.indriya.AbstractQuantity
-import tech.units.indriya.quantity.NumberQuantity
 import tech.units.indriya.quantity.Quantities
 import tech.units.indriya.unit.Units
 import javax.measure.Quantity
@@ -36,25 +34,13 @@ class OperationEvaluator {
         return when (operation.value) {
             Symbols.OPS_MULTIPLY -> q1?.multiply(q2)
             Symbols.OPS_DIVIDE -> q1?.divide(q2)
-            Symbols.OPS_ADD -> add(q1,q2)
+            Symbols.OPS_ADD -> (q1 as? Quantity<SomeQuantity>)?.add((q2 as Quantity<SomeQuantity>))
+            Symbols.OPS_SUBTRACT -> (q1 as? Quantity<SomeQuantity>)?.subtract((q2 as Quantity<SomeQuantity>))
             else -> null
         }
     }
 
-    private fun add(q1:Quantity<*>? , q2: Quantity<*>?):Quantity<*>?{
-        if( q1 == null  || q2 == null) return null
-
-        try {
-            (q1 as Quantity<Something>).to((q2 as Quantity<Something>).unit)
-        }catch (e:Exception){
-            println("Well, that won't work ")
-            return null
-        }
-
-        return (q1 as Quantity<Something>).add((q2 as Quantity<Something>))
-    }
-
-    private interface Something:Quantity<Something>
+    private interface SomeQuantity:Quantity<SomeQuantity>
 
 }
 

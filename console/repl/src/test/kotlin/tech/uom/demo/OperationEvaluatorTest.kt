@@ -97,4 +97,35 @@ class OperationEvaluatorTest {
                 .onFailure { assertThat(it, IsInstanceOf(UnconvertibleException::class.java)) }
 
     }
+
+
+    @Test
+    fun `can subtract quantities`() {
+        val inputTree = Operation(
+                value = "-",
+                left = QuantityElement(value = "12", unit = "m"),
+                right = QuantityElement(value = "3", unit = "m")
+        )
+
+        val expectedResult = q(9, Units.METRE)
+
+        val result = OperationEvaluator().evaluate(inputTree)
+        assertThat(result, `is`(expectedResult as Quantity<*>))
+    }
+
+    @Test
+    fun `cannot subtract different quantities`() {
+        val inputTree = Operation(
+                value = "-",
+                left = QuantityElement(value = "12", unit = "l"),
+                right = QuantityElement(value = "3", unit = "m")
+        )
+
+        kotlin.runCatching {
+            OperationEvaluator().evaluate(inputTree)
+        }
+                .onSuccess { fail("Expected exception to be thrown") }
+                .onFailure { assertThat(it, IsInstanceOf(UnconvertibleException::class.java)) }
+
+    }
 }
