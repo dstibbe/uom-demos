@@ -44,7 +44,6 @@ class OperationEvaluatorTest {
 
     }
 
-    @Ignore("Rational numbers are not properly implemented it seems")
     @Test
     fun `can divide`() {
         val inputTree = Operation(
