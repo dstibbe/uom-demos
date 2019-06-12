@@ -60,4 +60,38 @@ class OperationEvaluatorTest {
                 , `is`(expectedResult as Quantity<*>))
 
     }
+
+    @Test
+    fun `can add`() {
+        val inputTree = Operation(
+                value = "+",
+                left = QuantityElement(value = "12", unit = "m"),
+                right = QuantityElement(value = "3", unit = "m")
+        )
+
+        val expectedResult = q(15, Units.METRE)
+
+        val result = OperationEvaluator().evaluate(inputTree)
+        assertThat(
+                result
+                , `is`(expectedResult as Quantity<*>))
+
+    }
+
+    @Test
+    fun `cannot add different quantities`() {
+        val inputTree = Operation(
+                value = "+",
+                left = QuantityElement(value = "12", unit = "l"),
+                right = QuantityElement(value = "3", unit = "m")
+        )
+
+        val expectedResult = q(15, Units.METRE)
+
+        val result = OperationEvaluator().evaluate(inputTree)
+        assertThat(
+                result
+                , `is`(expectedResult as Quantity<*>))
+
+    }
 }
