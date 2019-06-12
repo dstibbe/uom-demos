@@ -9,7 +9,7 @@ fun main() {
 
 class Repl {
     companion object {
-        val tokerizer = ExpressionTokerizer()
+        val tokenizer = ExpressionTokenizer()
         val parser = ExpressionParser()
         val evaluator = OperationEvaluator()
     }
@@ -38,7 +38,7 @@ class Repl {
     }
 
     fun parseAndEvaluate(input: String): String {
-        return tokerizer.tokenize(input).run {
+        return tokenizer.tokenize(input).run {
             parser.parse(this).run{
                 evaluator.evaluate(this)?.toString() ?: "no result"
             }
