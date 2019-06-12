@@ -1,12 +1,16 @@
 package tech.uom.demo
 
 import org.hamcrest.core.Is.`is`
+import org.hamcrest.core.IsInstanceOf
 import org.hamcrest.core.IsNull.nullValue
 import org.junit.Assert.assertThat
+import org.junit.Assert.fail
 import org.junit.Ignore
 import org.junit.Test
 import tech.units.indriya.unit.Units
+import java.lang.IllegalArgumentException
 import javax.measure.Quantity
+import javax.measure.UnconvertibleException
 
 class OperationEvaluatorTest {
 
@@ -86,12 +90,11 @@ class OperationEvaluatorTest {
                 right = QuantityElement(value = "3", unit = "m")
         )
 
-        val expectedResult = q(15, Units.METRE)
-
-        val result = OperationEvaluator().evaluate(inputTree)
-        assertThat(
-                result
-                , `is`(expectedResult as Quantity<*>))
+        kotlin.runCatching {
+            OperationEvaluator().evaluate(inputTree)
+        }
+                .onSuccess { fail("Expected exception to be thrown") }
+                .onFailure { assertThat(it, IsInstanceOf(UnconvertibleException::class.java)) }
 
     }
 }
