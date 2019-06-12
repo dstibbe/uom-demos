@@ -75,24 +75,6 @@ class ExpressionParser {
         }
     }
 
-//    private fun stupidParse(tokens: List<Token>): ParseElement {
-//
-//
-//        val q1 = parseQuantity(tokens[0].value, tokens[1].value)
-//
-//
-//        val q2 = parseQuantity(tokens[3].value, tokens[4].value)
-//        val operator = Operation(tokens[2].value, q1, q2)
-//
-////        if (tokens.size > 2) {
-////            if (tokens.size < 5) {
-////                throw java.lang.IllegalArgumentException("Righthand side of operation too short")
-////            }
-////
-////        }
-//        return operator
-//    }
-
     private fun parseNestedComputation(tokens: List<Token>): ParseElement {
         return tokens.indexOfFirst { it.value == ")" }.run {
             if (this == -1) throw IllegalStateException("Missing closing bracket")
@@ -127,9 +109,6 @@ class ExpressionParser {
         val value = tokens[0].value
         return if (tokens.size == 2) {
             val unit = tokens[1].value
-            if (!unitNames.contains(unit)) {
-                throw IllegalStateException("I don't know any unit called $unit")
-            }
             QuantityElement(value, unit)
         } else {
             parseValue(tokens)
