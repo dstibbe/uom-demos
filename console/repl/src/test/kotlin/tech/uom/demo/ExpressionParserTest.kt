@@ -10,7 +10,6 @@ import org.junit.Test
 class ExpressionParserTest {
 
     @Test
-    @Ignore
     fun `can parse quantity`() {
         val tokens = listOf(
                 Token("3"),
